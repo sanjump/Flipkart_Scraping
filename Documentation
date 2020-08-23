@@ -1,0 +1,33 @@
+Flipkart Scraping Electronics using Scrapy
+
+First : pip install scrapy, pip install scray-user-agents
+
+Get into spiders folder then, run using:
+
+scrapy crawl (spidername) -o (filename).(fileExtension)
+
+
+Spiders:
+
+mobile.py : For scraping mobiles
+laptop.py : For scraping laptops
+camera.py : For scraping cameras
+speaker.py : For scraping speakers
+earphone.py : For scraping earphones
+tablet.py : For scraping tablets
+
+JSON files:
+
+mobile.json : scraped mobile data
+laptop.json : scraped laptop data
+camera.json : scraped camera data
+speaker.json: scraped speaker data
+earphone.json : scraped earphone data
+tablet.json : scraped tablet data
+
+Method used for scrapying:
+
+1.Get the starting url
+2.Get all the product links in the current page
+3.Now go through all the product links and scrap product_name,description,price,product_link,photos,rating,reviews
+4.Repeat for each page
