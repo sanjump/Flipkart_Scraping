@@ -6,38 +6,49 @@ class FlipkartSpider(scrapy.Spider):
     pageno=2
     start_urls=['https://www.flipkart.com/laptops/pr?sid=6bo%2Cb5g&otracker=categorytree&page=1']
 
+
     def parse(self, response):
-                    items = FlipkartElectronicsItem()
-                    all_div = response.css("div._3O0U0u")
-                    for i in all_div:
-                                product_name = i.css('div._3wU53n::text').get()
-                                description = i.css('.tVe95H::text').extract()
-                                storeprice = i.css('._2rQ-NK::text').extract()
-                                storeLink = 'https://www.flipkart.com' + i.css("a._31qSD5::attr('href')").get()
-                                photos = i.xpath('//*[@id="container"]/div/div[3]/div[2]/div[1]/div[2]/div[2]/div/'
-                                                 'div/div/a/div[1]/div[1]/div[1]/div/img').xpath("@src").get()
-                                storeproductid=i.css("div::attr('data-id')").extract()
-                                product_id = ''.join(random.sample(string.ascii_lowercase + string.digits, 20))
-                                stores = [{
-                                    "storeProductId": storeproductid,
-                                    "storeLink": storeLink,
-                                    "storeName": "Flipkart",
-                                    "storePrice": storeprice[0][1:]
-                                }]
 
+        page = response.css("a._31qSD5::attr('href')").getall()
+        for p in page:
+            url = 'https://www.flipkart.com' + p
+            yield scrapy.Request(url, callback=self.parse_elec)
 
-                                items['product_name'] = product_name
-                                items['product_id'] = product_id
-                                items['stores'] = stores
-                                items['category'] = 'electronics'
-                                items['subcategory'] = 'laptops'
-                                items['description'] = description
-                                items["photos"] = photos
+        page = 'https://www.flipkart.com/laptops/pr?sid=6bo%2Cb5g&otracker=categorytree&page=' + str(FlipkartSpider.pageno)
+        if FlipkartSpider.pageno <= 10:
+            FlipkartSpider.pageno += 1
+            yield response.follow(page, callback=self.parse)
 
-                                yield items
+    def parse_elec(self, response):
 
-                                next_page = 'https://www.flipkart.com/laptops/pr?sid=6bo%2Cb5g&otracker=categorytree&page=' + str(FlipkartSpider.pageno)
-                                if FlipkartSpider.pageno<=15:
-                                    FlipkartSpider.pageno +=1
+                        items = FlipkartElectronicsItem()
+                        product_name = response.xpath(
+                            '//*[@id="container"]/div/div[3]/div[1]/div[2]/div[2]/div/div[1]/h1/span/text()').get()
+                        description = response.css('._2-riNZ::text').extract()
+                        storeprice = response.css('._3qQ9m1::text').extract()
+                        storeLink = response.url
+                        photos = response.xpath(
+                            '//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/img').xpath(
+                            "@src").get()
+                        k = storeLink.find("pid")
+                        rating = response.css('.hGSR34::text').extract()
+                        reviews = response.css('.qwjRop div div::text').extract()
+                        product_id = ''.join(random.sample(string.ascii_lowercase + string.digits, 20))
+                        stores = [{
+                            "storeProductId": storeLink[k + 4:k + 20],
+                            "storeLink": storeLink,
+                            "storeName": "Flipkart",
+                            "storePrice": storeprice[0][1:]
+                        }]
 
-                                    yield response.follow(next_page,callback=self.parse)
+                        items['product_name'] = product_name
+                        items['product_id'] = product_id
+                        items['stores'] = stores
+                        items['category'] = 'electronics'
+                        items['subcategory'] = 'speakers'
+                        items['description'] = description
+                        items["photos"] = photos
+                        items["rating"] = rating[0]
+                        items['reviews'] = reviews
+
+                        yield items

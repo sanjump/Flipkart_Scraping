@@ -20,6 +20,6 @@ class FlipkartElectronicsItem(scrapy.Item):
     photos = scrapy.Field()
     storeproductid = scrapy.Field()
     product_id = scrapy.Field()
-
-
+    rating = scrapy.Field()
+    reviews = scrapy.Field()
 
