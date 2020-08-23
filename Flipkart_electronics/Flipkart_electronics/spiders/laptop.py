@@ -45,7 +45,7 @@ class FlipkartSpider(scrapy.Spider):
                         items['product_id'] = product_id
                         items['stores'] = stores
                         items['category'] = 'electronics'
-                        items['subcategory'] = 'speakers'
+                        items['subcategory'] = 'laptop'
                         items['description'] = description
                         items["photos"] = photos
                         items["rating"] = rating[0]
