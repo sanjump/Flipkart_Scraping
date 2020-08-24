@@ -22,7 +22,8 @@ class FlipkartSpider(scrapy.Spider):
     def parse_elec(self, response):
                     items = FlipkartElectronicsItem()
                     product_name = response.xpath('//*[@id="container"]/div/div[3]/div[1]/div[2]/div[2]/div/div[1]/h1/span/text()').get()
-                    description = response.css('._2-riNZ::text').extract()
+                    spec_title = response.css(".col.col-3-12::text").extract()
+                    spec_detail = response.css("._3YhLQA::text").extract()
                     storeprice = response.css('._3qQ9m1::text').extract()
                     storeLink = response.url
                     photos = response.xpath('//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/img').xpath("@src").get()
@@ -30,12 +31,12 @@ class FlipkartSpider(scrapy.Spider):
                     rating = response.css('.hGSR34::text').extract()
                     reviews = response.css('.qwjRop div div::text').extract()
                     product_id = ''.join(random.sample(string.ascii_lowercase + string.digits, 20))
-                    stores = [{
+                    stores = {
                         "storeProductId": storeLink[k+4:k+20],
                         "storeLink": storeLink,
                         "storeName": "Flipkart",
                         "storePrice": storeprice[0][1:]
-                    }]
+                    }
 
 
                     items['product_name'] = product_name
@@ -43,7 +44,11 @@ class FlipkartSpider(scrapy.Spider):
                     items['stores'] = stores
                     items['category'] = 'electronics'
                     items['subcategory'] = 'earphones'
-                    items['description'] = description
+                    items['description'] = {}
+
+                    for i in range(len(spec_title)):
+                        items['description'][spec_title[i]] = spec_detail[i]
+
                     items["photos"] = photos
                     items["rating"] = rating[0]
                     items['reviews'] = reviews

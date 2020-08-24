@@ -22,4 +22,10 @@ class FlipkartElectronicsItem(scrapy.Item):
     product_id = scrapy.Field()
     rating = scrapy.Field()
     reviews = scrapy.Field()
-
+    Details = scrapy.Field()
+    Display = scrapy.Field()
+    Camera = scrapy.Field()
+    Battery = scrapy.Field()
+    Processor = scrapy.Field()
+    spec_title = scrapy.Field()
+    spec_detail = scrapy.Field()
