@@ -27,9 +27,10 @@ class FlipkartSpider(scrapy.Spider):
 
                         storeprice = response.css('._3qQ9m1::text').extract()
                         storeLink = response.url
-                        photos = response.xpath(
-                            '//*[@id="container"]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div[1]/div[2]/img').xpath(
-                            "@src").get()
+                        photos = response.css('script#jsonLD::text').extract()
+                        photos = photos[0].strip()
+                        u = photos.find("image")
+                        l = photos.find("name", u)
                         k = storeLink.find("pid")
                         spec_title = response.css(".col.col-3-12::text").extract()
                         spec_detail = response.css("._3YhLQA::text").extract()
@@ -38,6 +39,8 @@ class FlipkartSpider(scrapy.Spider):
                         product_id = ''.join(random.sample(string.ascii_lowercase + string.digits, 20))
 
                         stores = {
+                            "rating": rating[0],
+                            "reviews": reviews,
                             "storeProductId": storeLink[k + 4:k + 20],
                             "storeLink": storeLink,
                             "storeName": "Flipkart",
@@ -55,8 +58,7 @@ class FlipkartSpider(scrapy.Spider):
 
                             items['description'][spec_title[i]] = spec_detail[i]
 
-                        items["photos"] = photos
-                        items["rating"] = rating[0]
-                        items['reviews'] = reviews
+                        items["photos"] = photos[u+8:l-3]
+
 
                         yield items
