@@ -52,11 +52,13 @@ class FlipkartSpider(scrapy.Spider):
                     items['stores'] = stores
                     items['category'] = 'electronics'
                     items['subcategory'] = 'mobiles'
+                    items['brand'] = product_name.split()[0]
                     items['description']={}
 
                     for i in range(len(spec_title)):
 
                                            items['description'][spec_title[i]] = spec_detail[i]
+
 
                     items["photos"] = photos[0][l:-1]
 

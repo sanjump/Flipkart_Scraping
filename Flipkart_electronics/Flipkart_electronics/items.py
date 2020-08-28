@@ -24,3 +24,4 @@ class FlipkartElectronicsItem(scrapy.Item):
     reviews = scrapy.Field()
     spec_title = scrapy.Field()
     spec_detail = scrapy.Field()
+    brand = scrapy.Field()
