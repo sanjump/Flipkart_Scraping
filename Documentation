@@ -25,9 +25,24 @@ speaker.json: scraped speaker data
 earphone.json : scraped earphone data
 tablet.json : scraped tablet data
 
-Method used for scrapying:
+Method used for scraping:
 
 1.Get the starting url
 2.Get all the product links in the current page
 3.Now go through all the product links and scrap product_name,description,price,product_link,photos,rating,reviews
 4.Repeat for each page
+
+
+FLIPKART
+
+Data collected -  product_name
+                  rating
+                  reviews
+                  storeProductId
+                  storeLink
+                  storePrice
+                  brand
+                  description
+                  photos
+
+

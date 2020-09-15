@@ -39,7 +39,7 @@ class FlipkartSpider(scrapy.Spider):
 
 
                     stores = {
-                        "rating" : rating[0],
+                        "rating" : "NA" if not rating else rating[0],
                         "reviews" : reviews,
                         "storeProductId": storeLink[k + 4:k + 20],
                         "storeLink": storeLink,

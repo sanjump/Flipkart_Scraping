@@ -37,7 +37,7 @@ class FlipkartSpider(scrapy.Spider):
                         product_id = ''.join(random.sample(string.ascii_lowercase + string.digits, 20))
 
                         stores = {
-                            "rating": rating[0],
+                            "rating": "NA" if not rating else rating[0],
                             "reviews": reviews,
                             "storeProductId": storeLink[k + 4:k + 20],
                             "storeLink": storeLink,
